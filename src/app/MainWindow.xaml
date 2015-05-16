@@ -1,0 +1,27 @@
+﻿<Window x:Class="SO6.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Simple lexer" Height="350" Width="525">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <RichTextBox Name="rtb">
+            <RichTextBox.Resources>
+                <Style TargetType="{x:Type Paragraph}">
+                    <Setter Property="Margin" Value="0"/>
+                </Style>
+            </RichTextBox.Resources>
+            <FlowDocument>
+                <Paragraph FontFamily="Consolas" xml:space="preserve">for (int i := 0; i &lt; 10; i++)
+{
+    int j = 5; /* comment */ j = i; // so what?
+    int x = -1 + 2 - 3+4;
+    MessageBox("I am /*Darkwing Duck*/ your father, Luke!");
+}</Paragraph>
+            </FlowDocument>
+        </RichTextBox>
+        <Button Click="ForceFormatting" Grid.Row="1">Go</Button>
+    </Grid>
+</Window>
