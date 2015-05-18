@@ -27,8 +27,9 @@ namespace SO6
         {
             rtb.IsEnabled = false;
             var doc = rtb.Document;
-            foreach (var par in GetParagraphs(doc.Blocks).ToList())
-                await UpdateParagraph(par);
+            //foreach (var par in GetParagraphs(doc.Blocks).ToList())
+            //    await UpdateParagraph(par);
+            await UpdateAllParagraphs(GetParagraphs(doc.Blocks).ToList());
             rtb.IsEnabled = true;
         }
 
@@ -53,8 +54,23 @@ namespace SO6
         {
             var completeTextRange = new TextRange(par.ContentStart, par.ContentEnd);
             completeTextRange.ClearAllProperties();
+            await UpdateInlines(par.Inlines);
+        }
 
-            var texts = ExtractText(par.Inlines);
+        async Task UpdateAllParagraphs(IEnumerable<Paragraph> paragraphs)
+        {
+            var materialParagraphs = paragraphs.ToList();
+            if (materialParagraphs.Count == 0)
+                return;
+            var completeTextRange = new TextRange(materialParagraphs.First().ContentStart,
+                                                  materialParagraphs.Last().ContentEnd);
+            completeTextRange.ClearAllProperties();
+            await UpdateInlines(materialParagraphs.SelectMany(par => par.Inlines));
+        }
+
+        async Task UpdateInlines(IEnumerable<Inline> inlines)
+        {
+            var texts = ExtractText(inlines);
             var positionsAndBrushes =
                 (from qualifiedToken in await Lexer.Parse(texts)
                  let brush = GetBrushForTokenType(qualifiedToken.Type)
