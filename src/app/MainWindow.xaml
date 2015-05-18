@@ -14,10 +14,13 @@
                 </Style>
             </RichTextBox.Resources>
             <FlowDocument>
-                <Paragraph FontFamily="Consolas" xml:space="preserve">for (int i := 0; i &lt; 10; i++)
+                <Paragraph FontFamily="Consolas" xml:space="preserve">/* this is
+commented out */
+for (int i := 0; i &lt; 10; i++)
 {
     int j = 5; /* comment */ j = i; // so what?
-    int x = -1 + 2 - 3+4;
+    int x = -1 + 2 - 3+4; /*
+    and this is commented out */
     MessageBox("I am /*Darkwing Duck*/ your father, Luke!");
 }</Paragraph>
             </FlowDocument>
