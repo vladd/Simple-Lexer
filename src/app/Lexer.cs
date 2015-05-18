@@ -50,7 +50,7 @@ namespace SO6
                             kvp => string.Format("(?<{0}>{1})", kvp.Key, kvp.Value))) +
                     ")";
             return new Regex(combinedRegexParts,
-                             RegexOptions.Compiled | RegexOptions.Multiline);
+                             RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
         }
 
         static Lexer()
@@ -62,7 +62,7 @@ namespace SO6
             {
                 { "ident",   @"\p{L}\w*" },
                 { "num",     numPatternWithSign },
-                { "comment", @"(/\*.*?\*/)|(//.*$)" },
+                { "comment", @"(/\*.*?\*/)|(//.*?$)" },
                 { "punct",   @"(:=)|(<=)|(>=)|(==)|[;+\-\*/\(\){}:<>=]" },
                 { "string",  "\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\"" },
                 { "space",   @"\s+" }
