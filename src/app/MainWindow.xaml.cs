@@ -101,9 +101,14 @@ namespace SO6
             return new[] { new RawText() { Text = "\n", Start = br.ContentStart } };
         }
 
+        IEnumerable<RawText> ExtractTextImpl(Span span)
+        {
+            return ExtractText(span.Inlines);
+        }
+
         IEnumerable<RawText> ExtractTextImpl(Inline inline)
         {
-            return ExtractText(inline.SiblingInlines);
+            return Enumerable.Empty<RawText>();
         }
 
         void ForceFormatting(object sender, RoutedEventArgs e)
