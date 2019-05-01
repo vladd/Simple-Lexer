@@ -84,48 +84,25 @@ namespace SO6
                 pb.position.ApplyPropertyValue(TextElement.ForegroundProperty, pb.brush);
         }
 
-        Brush GetBrushForTokenType(TokenType tokenType)
-        {
-            switch (tokenType)
+        Brush GetBrushForTokenType(TokenType tokenType) =>
+            tokenType switch
             {
-            case TokenType.Comment: return Brushes.LightGray;
-            case TokenType.Keyword: return Brushes.OrangeRed;
-            case TokenType.Number: return Brushes.Cyan;
-            case TokenType.Punct: return Brushes.Gray;
-            case TokenType.String: return Brushes.DarkRed;
-            }
-            return null;
-        }
+                TokenType.Comment => Brushes.LightGray,
+                TokenType.Keyword => Brushes.OrangeRed,
+                TokenType.Number => Brushes.Cyan,
+                TokenType.Punct => Brushes.Gray,
+                TokenType.String => Brushes.DarkRed,
+                _ => null
+            };
 
-        IEnumerable<RawText> ExtractText(IEnumerable<Inline> inlines)
-        {
-            return inlines.SelectMany(ExtractText);
-        }
-
-        IEnumerable<RawText> ExtractText(Inline inline)
-        {
-            return ExtractTextImpl((dynamic)inline);
-        }
-
-        IEnumerable<RawText> ExtractTextImpl(Run run)
-        {
-            return new[] { new RawText() { Text = run.Text, Start = run.ContentStart } };
-        }
-
-        IEnumerable<RawText> ExtractTextImpl(LineBreak br)
-        {
-            return new[] { new RawText() { Text = "\n", Start = br.ContentStart } };
-        }
-
-        IEnumerable<RawText> ExtractTextImpl(Span span)
-        {
-            return ExtractText(span.Inlines);
-        }
-
-        IEnumerable<RawText> ExtractTextImpl(Inline inline)
-        {
-            return Enumerable.Empty<RawText>();
-        }
+        IEnumerable<RawText> ExtractText(IEnumerable<Inline> inlines) =>
+            inlines.SelectMany(inline => inline switch
+                {
+                    Run run => new[] { new RawText() { Text = run.Text, Start = run.ContentStart } },
+                    LineBreak br => new[] { new RawText() { Text = "\n", Start = br.ContentStart } },
+                    Span span => ExtractText(span.Inlines),
+                    _ => Enumerable.Empty<RawText>()
+                });
 
         void ForceFormatting(object sender, RoutedEventArgs e)
         {
